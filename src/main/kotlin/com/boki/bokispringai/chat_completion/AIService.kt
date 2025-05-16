@@ -69,4 +69,14 @@ class AIService(
         return response
     }
 
+    fun analyzeImageUrlWithRequest(url: String, request: String): String? {
+        val userMessage = UserMessage.builder()
+            .text(request)
+            .media(Media(MimeTypeUtils.IMAGE_JPEG, URI.create(url)))
+            .build()
+        val response = openAiChatModel.call(userMessage)
+        println(response)
+        return response
+    }
+
 }

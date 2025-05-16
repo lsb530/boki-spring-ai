@@ -1,9 +1,6 @@
 package com.boki.bokispringai.chat_completion
 
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/ai")
 @RestController
@@ -19,6 +16,14 @@ class AIController(
     @PostMapping("/image")
     fun imageUrl2AI(@RequestBody request: Request): String? {
         return aiService.analyzeImageUrl(request)
+    }
+
+    @PostMapping("/image2")
+    fun imageUrl2AIWithRequest(
+        @RequestParam("url") url: String,
+        @RequestParam("request") request: String,
+    ): String? {
+        return aiService.analyzeImageUrlWithRequest(url, request)
     }
 
 }
