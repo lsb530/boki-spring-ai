@@ -100,4 +100,21 @@ class AIService(
         return response
     }
 
+    fun analyzeImageWithRequest(file: MultipartFile, request: String): String? {
+        println(request)
+        val resource = ByteArrayResource(file.bytes)
+        val mimeType = (file.contentType
+            ?.let { MimeTypeUtils.parseMimeType(it) }
+            ?: MimeTypeUtils.IMAGE_JPEG)
+
+        val userMessage = UserMessage.builder()
+            .text(request)
+            .media(Media(mimeType, resource))
+            .build()
+
+        val response = chatModel.call(userMessage)
+        println(response)
+        return response
+    }
+
 }

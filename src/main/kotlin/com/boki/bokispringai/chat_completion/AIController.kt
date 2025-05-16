@@ -37,4 +37,12 @@ class AIController(
         return aiService.analyzeImage(file)
     }
 
+    @PostMapping("/image4")
+    fun imageFile2AIWithRequest(
+        @RequestPart("file") file: MultipartFile,
+        @RequestPart("request") request: String
+    ): String? {
+        return aiService.analyzeImageWithRequest(file, request)
+    }
+
 }
