@@ -1,6 +1,12 @@
 package com.boki.bokispringai.chat_completion
 
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 
 @RequestMapping("/ai")
 @RestController
@@ -24,6 +30,11 @@ class AIController(
         @RequestParam("request") request: String,
     ): String? {
         return aiService.analyzeImageUrlWithRequest(url, request)
+    }
+
+    @PostMapping("/image3")
+    fun imageFile2AI(@RequestPart("file") file: MultipartFile): String? {
+        return aiService.analyzeImage(file)
     }
 
 }

@@ -5,8 +5,10 @@ import org.springframework.ai.chat.model.ChatModel
 import org.springframework.ai.chat.prompt.PromptTemplate
 import org.springframework.ai.content.Media
 import org.springframework.ai.openai.OpenAiChatModel
+import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.util.MimeTypeUtils
+import org.springframework.web.multipart.MultipartFile
 import java.net.URI
 
 @Service
@@ -75,6 +77,25 @@ class AIService(
             .media(Media(MimeTypeUtils.IMAGE_JPEG, URI.create(url)))
             .build()
         val response = openAiChatModel.call(userMessage)
+        println(response)
+        return response
+    }
+
+    fun analyzeImage(file: MultipartFile): String? {
+        // println(file.originalFilename)
+        val resource = ByteArrayResource(file.bytes)
+        val mimeType = (file.contentType
+            ?.let { MimeTypeUtils.parseMimeType(it) }
+            ?: MimeTypeUtils.IMAGE_JPEG)
+
+        val prompt = "너는 음식 감별사야. 사진을 보고, 이 사진으로 만들 수 있는 요리를 알려줘."
+        val userMessage = UserMessage.builder()
+            // .text("이 사진이 보이나요?")
+            .text(prompt)
+            .media(Media(mimeType, resource))
+            .build()
+
+        val response = chatModel.call(userMessage)
         println(response)
         return response
     }
