@@ -10,7 +10,7 @@ class Hello2 {
 
     @PostConstruct
     fun init() {
-        println("Hello2")
-        println("OpenAI API Key: $apiKey")
+        // println("Hello2")
+        // println("OpenAI API Key: $apiKey")
     }
 }

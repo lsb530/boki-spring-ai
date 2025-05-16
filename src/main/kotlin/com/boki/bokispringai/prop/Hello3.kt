@@ -7,7 +7,7 @@ class Hello3(
     private val props: OpenAIProperties
 ) {
     init {
-        println("Hello3")
-        println("OpenAI API Key: ${props.apiKey}")
+        // println("Hello3")
+        // println("OpenAI API Key: ${props.apiKey}")
     }
 }
