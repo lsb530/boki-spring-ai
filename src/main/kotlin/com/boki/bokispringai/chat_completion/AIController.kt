@@ -45,4 +45,9 @@ class AIController(
         return aiService.analyzeImageWithRequest(file, request)
     }
 
+    @PostMapping("/image/gen")
+    fun generateAIImg(@RequestBody request: Request): String? {
+        return aiService.generateAIImg(request)
+    }
+
 }

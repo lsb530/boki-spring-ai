@@ -4,7 +4,10 @@ import org.springframework.ai.chat.messages.UserMessage
 import org.springframework.ai.chat.model.ChatModel
 import org.springframework.ai.chat.prompt.PromptTemplate
 import org.springframework.ai.content.Media
+import org.springframework.ai.image.ImagePrompt
 import org.springframework.ai.openai.OpenAiChatModel
+import org.springframework.ai.openai.OpenAiImageModel
+import org.springframework.ai.openai.OpenAiImageOptions
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.util.MimeTypeUtils
@@ -14,7 +17,8 @@ import java.net.URI
 @Service
 class AIService(
     private val openAiChatModel: OpenAiChatModel,
-    private val chatModel: ChatModel
+    private val chatModel: ChatModel,
+    private val openAiImageModel: OpenAiImageModel
 ) {
 
     fun chatbotDoctor(request: Request): String? {
@@ -115,6 +119,35 @@ class AIService(
         val response = chatModel.call(userMessage)
         println(response)
         return response
+    }
+
+    fun generateAIImg(request: Request): String? {
+
+        val prompt ="""사용자가 요청텍스트를 입력하면 너는 최선으로 디테일을 살려서 그림을 그려줘.
+            |혹시 노트북을 그려달라는 요청이 나오면 노트북 뒷판은 그냥 애플 로고만 나와야돼.
+            |사람이 바라보고 있는 노트북 화면의 반대편이 바로 뒷판이야.
+            |왜냐하면 뒷판에는 화면이 나올 수 없거든!
+            |그림은 만화 형태로 그려줘.
+        """.trimMargin()
+
+        val response = openAiImageModel.call(
+            ImagePrompt(
+                request.text + prompt,
+                OpenAiImageOptions.builder()
+                    .quality("hd")
+                    .N(1)
+                    .width(1024)
+                    .height(1024)
+                    .build()
+            )
+        )
+        println(response)
+        println(response.result)
+
+        val finalUrl = response.result.output.url
+        println(finalUrl)
+
+        return finalUrl
     }
 
 }
