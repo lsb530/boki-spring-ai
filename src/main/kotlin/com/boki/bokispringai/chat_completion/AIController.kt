@@ -16,4 +16,9 @@ class AIController(
         return aiService.chatbotDoctor(request)
     }
 
+    @PostMapping("/image")
+    fun imageUrl2AI(@RequestBody request: Request): String? {
+        return aiService.analyzeImageUrl(request)
+    }
+
 }

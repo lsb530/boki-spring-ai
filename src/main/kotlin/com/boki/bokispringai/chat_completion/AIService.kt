@@ -1,9 +1,13 @@
 package com.boki.bokispringai.chat_completion
 
+import org.springframework.ai.chat.messages.UserMessage
 import org.springframework.ai.chat.model.ChatModel
 import org.springframework.ai.chat.prompt.PromptTemplate
+import org.springframework.ai.content.Media
 import org.springframework.ai.openai.OpenAiChatModel
 import org.springframework.stereotype.Service
+import org.springframework.util.MimeTypeUtils
+import java.net.URI
 
 @Service
 class AIService(
@@ -49,6 +53,20 @@ class AIService(
         val output = openAiChatModel.call(prompt).result.output
         println(output.text)
         return output.text
+    }
+
+    fun analyzeImageUrl(request: Request): String? {
+        // 사과: https://img.freepik.com/premium-vector/realistic-apple-illustration-design-free_555017-18.jpg
+        // 바나나: https://img.freepik.com/free-vector/sticker-design-with-a-banana-isolated_1308-77292.jpg
+        val prompt = "너는 음식 감별사야. 사진을 보고, 이 사진으로 만들 수 있는 요리를 알려줘."
+        val userMessage = UserMessage.builder()
+            // .text("이 사진이 보이나요?")
+            .text(prompt)
+            .media(Media(MimeTypeUtils.IMAGE_JPEG, URI.create(request.text)))
+            .build()
+        val response = openAiChatModel.call(userMessage)
+        println(response)
+        return response
     }
 
 }
